@@ -1,3 +1,4 @@
+import cloudinary from "../lib/Cloudinaryone.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/user.model.js";
 import bcrypt from "bcryptjs";
@@ -53,11 +54,6 @@ export const signup = async (req, res) => {
 }
 // res.send("sigup route");
 // };
-
-
-
-
-
 export const login = async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -84,16 +80,19 @@ export const login = async (req, res) => {
 };
 
 export const logout = (req, res) => {
-    try{
+    try {
         // res.clearCookie("jwt");
-        res.cookie("jwt","",{maxAge:0})
-        res.status(200).json({message:"Logged out suuccesfully!"})
-    }catch(error){
+        res.cookie("jwt", "", { maxAge: 0 })
+        res.status(200).json({ message: "Logged out suuccesfully!" })
+    } catch (error) {
         console.log("logout error", error.message);
         res.status(500).json({ message: "Internal server Error" });
     }
 };
-// you don't need to write both lines.
+
+const text=()=>{
+
+    // you don't need to write both lines.
 // res.clearCookie("jwt");
 // res.cookie("jwt","",{maxage:0})
 // Explanation:
@@ -107,3 +106,35 @@ export const logout = (req, res) => {
 
 // res.clearCookie("jwt"); is usually sufficient unless additional options (like path or httpOnly) were set when creating the cookie.
 // If the cookie was set with options like path, you should provide the same options in clearCookie().
+
+}
+
+
+export  const updateProfile = async (req, res) => {
+    try {
+        const { profilePic } = req.body;
+        const userId = req.user._id;
+        if (!profilePic) {
+            return res.status(400).json({ message: "profile pic is required" });
+        }
+
+        const uploadResponse = await cloudinary.uploader.upload(profilePic);
+        const updateduser=await User.findByIdAndUpdate(userId,{profilepic:uploadResponse.secure_url},{new:true});
+        res.status(200).json(updateduser);
+    }catch(error){
+        console.log("update profile error",error.message);
+        res.status(500).json({message:"Internal server error"});
+    }
+
+}
+
+export const checkAuth=(req,res)=>{
+    try{
+        res.status(200).json(req.user);
+
+    }catch(error){
+        console.log("check auth error",error.message);
+        res.status(500).json({message:"Internal server error"});
+    }
+    
+}
