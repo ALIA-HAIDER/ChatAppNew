@@ -6,9 +6,9 @@ import bcrypt from "bcryptjs";
 export const signup = async (req, res) => {
     const { email, fullName, password } = req.body;
     try {
-        //paswword  len and email existencce
-        if(!fullName || !email || !password){
-            return res.status(400).json({message:"All fields are required"});
+        //paswword  len and email existencce . 
+        if (!fullName || !email || !password) {
+            return res.status(400).json({ message: "All fields are required" });
         }
         if (password.length < 6) {
             return res.status(400).json({ message: "paswword must be at least 6 characters long " });
@@ -35,9 +35,9 @@ export const signup = async (req, res) => {
 
             res.status(201).json({
                 _id: newUser._id,
-                email:newUser.email,
-                fullname:newUser.fullName,
-                profilepic:newUser.profilepic,
+                email: newUser.email,
+                fullname: newUser.fullName,
+                profilepic: newUser.profilepic,
             });
 
         } else {
@@ -47,8 +47,8 @@ export const signup = async (req, res) => {
 
     } catch (error) {
         console.log("signup error", error.message);
-        res.status(500).json({message:"Internal server Error"});
-     }
+        res.status(500).json({ message: "Internal server Error" });
+    }
 
 }
 // res.send("sigup route");
@@ -58,10 +58,52 @@ export const signup = async (req, res) => {
 
 
 
-export const login = (req, res) => {
-    res.send("login route");
+export const login = async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({ message: 'invalid credentials' })
+        }
+        const isPasswordCorrect = await bcrypt.compare(password, user.password)
+        if (!isPasswordCorrect) {
+            return res.status(400).json({ message: 'invalid credentials' })
+        }
+        generateToken(user._id, res);
+        res.status(200).json({
+            _id: user._id,
+            email: user.email,
+            fullname: user.fullName,
+            profilepic: user.profilepic,
+        })
+
+    } catch (error) {
+        console.log("login error", error.message);
+        res.status(500).json({ message: "Internal server Error" });
+    }
 };
 
 export const logout = (req, res) => {
-    res.send("logout route");
+    try{
+        // res.clearCookie("jwt");
+        res.cookie("jwt","",{maxAge:0})
+        res.status(200).json({message:"Logged out suuccesfully!"})
+    }catch(error){
+        console.log("logout error", error.message);
+        res.status(500).json({ message: "Internal server Error" });
+    }
 };
+// you don't need to write both lines.
+// res.clearCookie("jwt");
+// res.cookie("jwt","",{maxage:0})
+// Explanation:
+// res.clearCookie("jwt");
+
+// This explicitly removes the "jwt" cookie from the response.
+// res.cookie("jwt", "", { maxAge: 0 });
+
+// This sets an empty "jwt" cookie with an expiration time of 0, effectively removing it.
+// Best Practice:
+
+// res.clearCookie("jwt"); is usually sufficient unless additional options (like path or httpOnly) were set when creating the cookie.
+// If the cookie was set with options like path, you should provide the same options in clearCookie().
