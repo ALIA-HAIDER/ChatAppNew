@@ -111,7 +111,7 @@ function SignupPage() {
 
           <div className="text-center">
             <p className="text-[#EEEEEE]/60">
-              Already have an account? <Link to="/login" className="text-[#D84040] hover:underline">Sign in</Link>
+              Already have an account? <Link to="/login" className="text-[#D84040] hover:underline">Login</Link>
             </p>
           </div>
         </div>
