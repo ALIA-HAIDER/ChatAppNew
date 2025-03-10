@@ -26,7 +26,7 @@ const PORT=process.env.PORT || 3001;
                                                            
 
 app.use("/api/auth",authRoutes);
-app.use("/api/amessage",messageRoutes);;
+app.use("/api/message",messageRoutes);;
 
 
 app. listen(PORT,()=>{

@@ -26,8 +26,8 @@ function Navbar() {
     <nav className="bg-[#1D1616] text-[#EEEEEE] shadow-md px-6 py-4">
       <div className="container mx-auto flex justify-between items-center">
         {/* Left: App Name */}
-        <Link to="/" className="text-2xl font-bold font-sans text-[#D84040]">
-          ShadowOrachle
+        <Link to="/" className="text-2xl font-bold font-serif text-[#D84040]">
+        OBLIVION
         </Link>
 
         {/* Right: Desktop Navigation */}
