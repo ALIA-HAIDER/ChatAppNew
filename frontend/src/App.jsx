@@ -9,6 +9,7 @@ import { useAuthStore } from "../src/store/useAuthStore.js";
 import { useEffect } from "react";
 import SettingsPage from "./pages/SettingsPage.jsx";
 import { Toaster } from "react-hot-toast";
+import Footer from "./components/Footer.jsx";
 
 function App() {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
@@ -27,9 +28,10 @@ function App() {
     );
 
   return (
-    <>
+    
+      <div className="max-h-screen">
       <Navbar />
-      <Routes>
+      <Routes >
         <Route
           path="/"
           element={authUser ? <HomePage /> : <Navigate to="/login" />}
@@ -51,8 +53,10 @@ function App() {
           element={authUser ? <SettingsPage /> : <Navigate to="/login" />}
         />
       </Routes>
+      <Footer/>
       <Toaster position="top-center" reverseOrder={false} />
-    </>
+      </div>
+    
   );
 }
 

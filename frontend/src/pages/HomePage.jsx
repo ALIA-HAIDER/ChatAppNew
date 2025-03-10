@@ -8,10 +8,10 @@ function HomePage() {
   const { selectedUser } = useChatStore();
 
   return (
-    <div className="justify-center align-middle w-[100vw] h-[100vh] bg-[#1D1616]">
-      <div className=" align-middle p-4 pt-0 ">
-        <div className="roundeed-lg h-[calc(100vh-6rem)]">
-          <div className="flex h-full w-[100%] rounded-lg overfow-hidden">
+    <div className=" z-0 justify-center align-middle w-full h-fit bg-gradient-to-br from-[#1D1616] to-[#2A1B3D] text-[#EEEEEE] ">
+      <div className=" align-middle  pt-0 ">
+        <div className="roundeed-lg ">
+          <div className="flex h-[90vh] w-[100%] rounded-lg overfow-hidden">
             <Slidebar/>
 
             {!selectedUser ?  <NoChatselected/> : <ChatContainer/>}

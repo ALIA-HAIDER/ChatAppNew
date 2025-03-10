@@ -7,8 +7,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import pic from "../assets/pic.jpeg";
 
 function ChatContainer() {
-  const { messages, getMessages, isMessagesLoading, selectedUser } =
-    useChatStore();
+  const { messages, getMessages, isMessagesLoading, selectedUser } = useChatStore();
   const { authUser } = useAuthStore();
 
   useEffect(() => {
@@ -24,22 +23,23 @@ function ChatContainer() {
       </div>
     );
   }
+
   return (
-    <div className="flex-1 flex flex-col overflow-auto">
+    <div className="flex-1 flex flex-col overflow-auto bg-gradient-to-b from-[#092629] to-[#004D3F] text-white">
       <ChatHeader />
 
-      <div className="bg-amber-50 flex-1 overflow-y-auto p-4 space-y-4">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
             key={message._id}
             className={`flex items-start gap-3 ${
-              !message.senderId === authUser._id
+              message.senderId === authUser._id
                 ? "justify-end "
                 : "justify-start flex-row-reverse"
             }`}
           >
             {/* Avatar */}
-            <div className="w-10 h-10 rounded-full border overflow-hidden">
+            <div className="w-10 h-10 rounded-full border-2 border-[#E6B373] overflow-hidden shadow-lg">
               <img
                 src={
                   message.senderId === authUser._id
@@ -53,15 +53,15 @@ function ChatContainer() {
 
             {/* Message Content */}
             <div className="max-w-xs sm:max-w-sm flex flex-col">
-              <div className={`chat-header text-sm opacity-70 mb-1`}>
-                <time className="text-xs">{message.createdAt}</time>
+              <div className="chat-header text-xs text-[#E6B373] opacity-80 mb-1">
+                <time>{message.createdAt}</time>
               </div>
 
               <div
-                className={`p-2 rounded-lg ${
+                className={`p-3 rounded-lg shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 ${
                   message.senderId === authUser._id
-                    ? "bg-green-300 text-black"
-                    : "bg-gray-200 text-gray-900"
+                    ? "bg-[#E6B373] text-[#092629]"
+                    : "bg-[#FCF1EA] text-[#004D3F]"
                 }`}
               >
                 {/* Image Message */}
@@ -69,12 +69,12 @@ function ChatContainer() {
                   <img
                     src={message.image}
                     alt="Attachment"
-                    className="max-w-[200px] rounded-md mb-2"
+                    className="max-w-[200px] rounded-md mb-2 shadow-md"
                   />
                 )}
 
                 {/* Text Message */}
-                {message.text && <p className="break-words">{message.text}</p>}
+                {message.text && <p className="break-words text-sm">{message.text}</p>}
               </div>
             </div>
           </div>
