@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect ,useRef ,useLayoutEffect} from "react";
 import { useChatStore } from "../store/useChatStore";
 import MessageSkeleton from "./skeletons/MessageSkeleton ";
 import ChatHeader from "./ChatHeader";
@@ -14,6 +14,14 @@ function ChatContainer() {
     getMessages(selectedUser._id);
   }, [selectedUser._id, getMessages]);
 
+  const scrollRef=useRef(null);
+  useLayoutEffect(()=>{
+    if(scrollRef.current){
+      scrollRef.current.scrollTop=scrollRef.current.scrollHeight;
+    }
+  },[messages]);
+
+
   if (isMessagesLoading) {
     return (
       <div className="flex-1 flex flex-col overflow-auto">
@@ -23,19 +31,20 @@ function ChatContainer() {
       </div>
     );
   }
+  
 
   return (
     <div className="flex-1 flex flex-col overflow-auto bg-gradient-to-b from-[#092629] to-[#004D3F] text-white">
       <ChatHeader />
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div ref={scrollRef}  className="flex-1  overflow-y-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
             key={message._id}
             className={`flex items-start gap-3 ${
               message.senderId === authUser._id
                 ? "justify-end "
-                : "justify-start flex-row-reverse"
+                : "justify-start "
             }`}
           >
             {/* Avatar */}

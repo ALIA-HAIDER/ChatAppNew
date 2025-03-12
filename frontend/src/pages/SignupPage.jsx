@@ -2,29 +2,43 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { Link } from "react-router-dom";
 import { FiEye, FiEyeOff } from "react-icons/fi";
+import { useAuthStore } from "../store/useAuthStore.js";
 
 function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    username: "",
+  const [FormData, setFormData] = useState({
+    fullName: "",
     email: "",
     password: "",
   });
 
+  const { signup, isSigningUp } = useAuthStore();
+
   const validateForm = () => {
-    if (!formData.username || !formData.email || !formData.password) {
-      return toast.error("Yo! Fill in all details.");
+    if (!FormData.fullName || !FormData.email || !FormData.password) {
+      return toast.error("please fill all details");
     }
-    if (!formData.email.includes("@")) {
-      return toast.error("Ayo, drop a valid email!");
+    if (!FormData.email.includes("@")) {
+      return toast.error("please enter valid email");
     }
+    if (FormData.password.length < 6) {
+      return toast.error("password must be at least 6 characters long");
+    }
+
     return true;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm() === true) {
-      toast.success("Welcome to the fam! 🎉");
+    const success=validateForm();
+    if (success === true) {
+      try {
+        await signup(FormData);
+      } catch (error) {
+        console.log("Error in signup:", error);
+      } finally {
+        setFormData({ username: "", email: "", password: "" });
+      }
     }
   };
 
@@ -46,19 +60,23 @@ function SignupPage() {
             <input
               type="text"
               placeholder="Pick your alias, legend"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              value={FormData.fullName}
+              onChange={(e) =>
+                setFormData({ ...FormData, fullName: e.target.value })
+              }
               className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-[#FCA311] transition-shadow shadow-lg hover:shadow-[#FCA311]"
             />
           </div>
-          
+
           <div>
             <label className="block text-sm font-medium mb-1">Email</label>
             <input
               type="email"
               placeholder="Drop your email, fam"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              value={FormData.email}
+              onChange={(e) =>
+                setFormData({ ...FormData, email: e.target.value })
+              }
               className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-600 text-white focus:ring-2 focus:ring-[#FCA311] transition-shadow shadow-lg hover:shadow-[#FCA311]"
             />
           </div>
@@ -70,8 +88,10 @@ function SignupPage() {
                 type={showPassword ? "text" : "password"}
                 className="w-full px-4 py-2 rounded-lg bg-gray-800 border border-gray-600 text-white  focus:ring-[#FCA311] transition-shadow shadow-lg hover:shadow-[#FCA311]"
                 placeholder="Make it hacker-proof"
-                value={formData.password}
-                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                value={FormData.password}
+                onChange={(e) =>
+                  setFormData({ ...FormData, password: e.target.value })
+                }
               />
               <button
                 type="button"
@@ -87,15 +107,18 @@ function SignupPage() {
             type="submit"
             className="w-full py-2 rounded-lg bg-[#FCA311] text-black font-semibold hover:bg-[#ffbe3d] transition-transform transform hover:scale-105 shadow-lg"
           >
-            Create Account & Enter the Matrix ⚡
+            {isSigningUp ? "Loading..." : "Create Account"}
           </button>
         </form>
 
         {/* Login Redirect */}
         <div className="text-center mt-4">
           <p className="text-gray-400">
-            Already vibing here? 
-            <Link to="/login" className="text-[#FCA311] hover:underline ml-1 transition-all hover:text-[#ffbe3d]">
+            Already vibing here?
+            <Link
+              to="/login"
+              className="text-[#FCA311] hover:underline ml-1 transition-all hover:text-[#ffbe3d]"
+            >
               Log in & Reconnect 🖤
             </Link>
           </p>
