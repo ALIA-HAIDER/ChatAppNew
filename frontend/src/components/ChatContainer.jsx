@@ -69,7 +69,7 @@ function ChatContainer() {
               </div>
 
               <div
-                className={`p-3 rounded-lg shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 ${
+                className={` p-1 md:p-3 lg:p-3 rounded-lg shadow-md transition-transform duration-300 ease-in-out transform hover:scale-105 ${
                   message.senderId === authUser._id
                     ? "bg-[#E6B373] text-[#092629]"
                     : "bg-[#FCF1EA] text-[#004D3F]"
@@ -80,7 +80,7 @@ function ChatContainer() {
                   <img
                     src={message.image}
                     alt="Attachment"
-                    className="max-w-[200px] rounded-md mb-2 shadow-md"
+                    className="w-[100px] md:w-[200px] max-w-[200px] rounded-md mb-2 shadow-md"
                   />
                 )}
 
