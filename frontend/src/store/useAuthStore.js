@@ -87,13 +87,23 @@ export const useAuthStore = create((set,get) => ({
         const authUser=get().authUser;
         if(!authUser || get().socket?.connected) return;
         const socket=io("http://localhost:3000",{
+            query:{
+                userId:authUser._id,
+            },
             withCredentials:true,
         });
-        set({ socket });
+        
         socket.connect();
+        set({ socket });
         console.log(" User Socket connected");
+        socket.on("getOnlineUsers",(userIDs)=>{
+            set({onlineUsers:userIDs});
+            
+        })
 
     },
+
+
     disconnectSocket:()=>{
         const socket=get().socket;
         if(socket){
