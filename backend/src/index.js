@@ -15,13 +15,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());//alow you to parse the cookie
 
 //resolving corse error
-app.use(cors(
-   {
-     origin:"http://localhost:5173",
-     credentials:true
-
-   }
-))
+app.use(cors({
+  origin: ["http://localhost:5173", "https://chat-app-backend-d26q.onrender.com"],
+  credentials: true
+}));
 
 const PORT=process.env.PORT || 3001;
                                                            
