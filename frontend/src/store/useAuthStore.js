@@ -86,7 +86,7 @@ export const useAuthStore = create((set,get) => ({
     connectSocket:()=>{
         const authUser=get().authUser;
         if(!authUser || get().socket?.connected) return;
-        const socket=io("http://localhost:3000",{
+        const socket=io("https://chat-app-backend-d26q.onrender.com",{
             query:{
                 userId:authUser._id,
             },
