@@ -16,7 +16,7 @@ app.use(cookieParser());//alow you to parse the cookie
 
 //resolving corse error
 app.use(cors({
-  origin: ["http://localhost:5173", "https://chat-app-backend-d26q.onrender.com"],
+  origin: ["http://localhost:5173", "https://chat-app-backend-d26q.onrender.com", "https://chat-app-new-inky.vercel.app"],
   credentials: true
 }));
 
